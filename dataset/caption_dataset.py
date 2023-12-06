@@ -158,7 +158,11 @@ class coco_dataset(Dataset):
         self.root_path = root_path
         self.ann_new = []
         self.add_object = add_object
+        ctr = 0
         for each in self.ann:
+            ctr += 1
+            if ctr == 100:
+                break
             # print(each)
             filename = each["filename"]
             sentences = each["sentences"]

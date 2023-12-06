@@ -16,8 +16,8 @@ dictitems:
   eos: '[SEP]'
   image_res: 384
   k_test: 128
-  max_length: 10
-  min_length: 1
+  max_length: 25
+  min_length: 8
   optimizer: !!python/object/apply:ruamel.yaml.comments.CommentedMap
     dictitems:
       lr1: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
