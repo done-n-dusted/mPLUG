@@ -159,6 +159,7 @@ class coco_dataset(Dataset):
         self.ann_new = []
         self.add_object = add_object
         for each in self.ann:
+            # print(each)
             filename = each["filename"]
             sentences = each["sentences"]
             filepath = each["filepath"]

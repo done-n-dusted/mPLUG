@@ -68,7 +68,7 @@ def create_optimizer(args, model, filter_bias_and_bn=True):
     if 'fused' in opt_lower:
         assert has_apex and torch.cuda.is_available(), 'APEX and CUDA required for fused optimizers'
 
-    opt_args = dict(lr=args.lr, weight_decay=weight_decay)
+    opt_args = dict(lr=args.lr1, weight_decay=weight_decay)
     if hasattr(args, 'opt_eps') and args.opt_eps is not None:
         opt_args['eps'] = args.opt_eps
     if hasattr(args, 'opt_betas') and args.opt_betas is not None:

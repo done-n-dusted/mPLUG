@@ -1,6 +1,6 @@
 import argparse
 import os
-import ruamel_yaml as yaml
+import ruamel.yaml as yaml
 import language_evaluation
 import numpy as np
 import random
@@ -26,6 +26,13 @@ from dataset import create_dataset, create_sampler, create_loader, coco_collate_
 
 from scheduler import create_scheduler
 from optim import create_optimizer, create_two_optimizer
+from transformers import BertTokenizer
+
+import warnings
+
+# Suppress specific warning category
+warnings.filterwarnings("ignore", message="__floordiv__ is deprecated", category=UserWarning)
+warnings.filterwarnings("ignore", message="None of the inputs have requires_grad=True", category=UserWarning)
 
 
 def train(model, data_loader, optimizer, tokenizer, epoch, warmup_steps, device, scheduler, config, do_amp=False,
@@ -267,7 +274,7 @@ def main(args, config):
     result_file = save_result(vqa_result, args.result_dir, 'vqa_result_epoch10')
     if utils.is_main_process():
         result = cal_metric(result_file)
-    dist.barrier()
+    # dist.barrier()
     for epoch in range(start_epoch, max_epoch):
         if epoch > 0:
             lr_scheduler.step(epoch + warmup_steps)
@@ -301,7 +308,7 @@ def main(args, config):
                 'epoch': epoch,
             }, os.path.join(args.output_dir, 'checkpoint_%02d.pth' % epoch))
 
-        dist.barrier()
+        # dist.barrier()
 
     #vqa_result = evaluation(model, test_loader, tokenizer, device, config)
     #result_file = save_result(vqa_result, args.result_dir, 'vqa_result_epoch%d' % epoch)
@@ -328,7 +335,7 @@ if __name__ == '__main__':
     parser.add_argument('--beam_size', default=5, type=int)
     parser.add_argument('--world_size', default=1, type=int, help='number of distributed processes')
     parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
-    parser.add_argument('--distributed', default=True, type=bool)
+    parser.add_argument('--distributed', default=False, type=bool)
     parser.add_argument('--do_two_optim', action='store_true')
     parser.add_argument('--add_object', action='store_true')
     parser.add_argument('--do_amp', action='store_true')
@@ -337,7 +344,9 @@ if __name__ == '__main__':
     parser.add_argument('--accum_steps', default=4, type=int)
     args = parser.parse_args()
 
-    config = yaml.load(open(args.config, 'r'), Loader=yaml.Loader)
+    yaml_loader = yaml.YAML(typ='rt')
+    config = yaml_loader.load(open(args.config, 'r'))
+    # config = yaml.load(open(args.config, 'r'), Loader=yaml.Loader)
 
     args.result_dir = os.path.join(args.output_dir, 'result')
 
@@ -352,7 +361,9 @@ if __name__ == '__main__':
     config['text_encoder'] = args.text_encoder
     config['text_decoder'] = args.text_decoder
 
+    yaml_dumper = yaml.YAML(typ='unsafe', pure=True)
 
-    yaml.dump(config, open(os.path.join(args.output_dir, 'config.yaml'), 'w'))
+    yaml_dumper.dump(config, open(os.path.join(args.output_dir, 'config.yaml'), 'w'))
+    # yaml.dump(config, open(os.path.join(args.output_dir, 'config.yaml'), 'w'))
 
     main(args, config)

@@ -69,16 +69,18 @@ def load(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_a
     else:
         raise RuntimeError(f"Model {name} not found; available models = {available_models()}")
 
+    # print(model_path)
+    # print("model_path", model_path)
     try:
         # loading JIT archive
-        model = torch.jit.load(model_path, map_location="cpu").eval()
+        model = torch.jit.load(model_path, map_location=torch.device("cpu")).eval()
         state_dict = None
     except RuntimeError:
         # loading saved state dict
         if jit:
             warnings.warn(f"File {model_path} is not a JIT archive. Loading as a state dict instead")
             jit = False
-        state_dict = torch.load(model_path, map_location="cpu")
+        state_dict = torch.load(model_path, map_location=torch.device("cpu"))
         model = build_model(state_dict)#.to(device)
     n_px = model.visual.input_resolution
 
