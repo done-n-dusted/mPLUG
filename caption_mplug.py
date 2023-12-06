@@ -272,6 +272,11 @@ def main(args, config):
     start_time = time.time()
     vqa_result = evaluation(model, test_loader, tokenizer, device, config)
     result_file = save_result(vqa_result, args.result_dir, 'vqa_result_epoch10')
+    result = cal_metric(result_file)
+    result["epoch"] = 10
+    with open(os.path.join(args.output_dir, "eval_log.txt"), "a") as f:
+                f.write(str(result) + '\n')
+
     if utils.is_main_process():
         result = cal_metric(result_file)
     # dist.barrier()
@@ -294,19 +299,22 @@ def main(args, config):
         result_file = save_result(vqa_result, args.result_dir, 'vqa_result_epoch%d' % epoch)
         if utils.is_main_process():
             result = cal_metric(result_file)
+            result["epoch"] = epoch
             log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                          'epoch': epoch,
                          }
-            with open(os.path.join(args.output_dir, "log.txt"), "a") as f:
+            with open(os.path.join(args.output_dir, "eval_log.txt"), "a") as f:
+                f.write(str(result) + '\n')
+            with open(os.path.join(args.output_dir, "training_log.txt"), "a") as f:
                 f.write(json.dumps(log_stats) + "\n")
 
-            torch.save({
-                'model': model_without_ddp.state_dict(),
-                'optimizer': optimizer.state_dict(),
-                'lr_scheduler': lr_scheduler.state_dict(),
-                'config': config,
-                'epoch': epoch,
-            }, os.path.join(args.output_dir, 'checkpoint_%02d.pth' % epoch))
+            # torch.save({
+            #     'model': model_without_ddp.state_dict(),
+            #     'optimizer': optimizer.state_dict(),
+            #     'lr_scheduler': lr_scheduler.state_dict(),
+            #     'config': config,
+            #     'epoch': epoch,
+            # }, os.path.join(args.output_dir, 'checkpoint_%02d.pth' % epoch))
 
         # dist.barrier()
 

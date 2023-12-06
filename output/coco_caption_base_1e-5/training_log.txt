@@ -1,0 +1,5 @@
+{"train_lr1": "0.000", "train_lr2": "0.000", "train_loss": "0.555", "epoch": 0}
+{"train_lr1": "0.000", "train_lr2": "0.000", "train_loss": "0.395", "epoch": 1}
+{"train_lr1": "0.000", "train_lr2": "0.000", "train_loss": "0.364", "epoch": 2}
+{"train_lr1": "0.000", "train_lr2": "0.000", "train_loss": "0.343", "epoch": 3}
+{"train_lr1": "0.000", "train_lr2": "0.000", "train_loss": "0.331", "epoch": 4}

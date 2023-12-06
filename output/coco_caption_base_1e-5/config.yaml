@@ -5,8 +5,8 @@ dictitems:
     args: [0.4]
     state: {_e_sign: null, _e_width: null, _exp: null, _m_lead0: 1, _m_sign: false,
       _prec: 1, _underscore: null, _width: 3}
-  batch_size_test: 64
-  batch_size_train: 64
+  batch_size_test: 16
+  batch_size_train: 16
   beam_size: 5
   bert_config: configs/config_bert_stride3.json
   bos: '[CLS]'

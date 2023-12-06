@@ -161,7 +161,7 @@ class coco_dataset(Dataset):
         ctr = 0
         for each in self.ann:
             ctr += 1
-            if ctr == 100:
+            if ctr == 501:
                 break
             # print(each)
             filename = each["filename"]
