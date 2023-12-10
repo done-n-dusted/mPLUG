@@ -1,3 +1,33 @@
+# CSE597 -- Vision and Language Final Project
+
+This repo is trying to replicate mPLUG. This is a forked repo of the original one and the contents are the same that follows. With some minor changes in the code, the code works pretty well by itself.
+
+- Name: Anurag Pendyala
+
+## Instructions
+1. Download the VIT-B-16 model from [vit-b-16](https://alice-open.oss-cn-zhangjiakou.aliyuncs.com/mPLUG/ViT-B-16.tar) and the checkpoint from [mplug.en.base](https://alice-open.oss-cn-zhangjiakou.aliyuncs.com/mPLUG/mplug_base.pth).
+
+1. Download COCO Caption dataset from the original websites.
+2. Download and extract the provided dataset json files.
+3. Download language evalution tool([language_evalution](https://alice-open.oss-cn-zhangjiakou.aliyuncs.com/mPLUG/language_evaluation.tar)).
+4. In configs/caption_mplug_base.yaml, set the paths for the json files and the image paths.
+5. Finetune the pre-trained mplug_base or large model using 8 A100 GPUs:
+```
+sh scripts/caption_mplug_base.sh
+```
+
+## Inference Instructions
+
+In the `report_utils` folder,
+
+1. Run `python plotting_metrics.py <location eval_log.txt>` to get the metrics plot.
+2. Run `python plotting_tloss.py <location eval_log.txt>` to get the training loss plot.
+2. Run `python create_test.py <locationresult_json file>` to get results.
+
+
+#
+#
+
 # mPLUG: Effective and Efficient Vision-Language Learning by Cross-modal Skip-connections.
 
 [https://arxiv.org/abs/2205.12005](https://arxiv.org/abs/2205.12005)
